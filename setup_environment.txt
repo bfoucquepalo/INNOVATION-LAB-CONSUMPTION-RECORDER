@@ -1,0 +1,9 @@
+#Virtual env
+python3 -m venv pyconsumptionrecorder
+source ./pyconsumptionrecorder/bin/activate 
+
+#Package
+pip install --upgrade pip
+python -m pip install kivy
+pip install psutil
+pip install pyinstaller

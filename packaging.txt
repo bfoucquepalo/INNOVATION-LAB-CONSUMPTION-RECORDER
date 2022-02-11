@@ -1,0 +1,22 @@
+
+#reference
+https://kivy.org/doc/stable/guide/packaging-osx.html#osx-pyinstaller
+
+#in brew
+brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer
+
+#in the virtual env
+#greenit_consumption
+pyinstaller -y --clean --windowed --name greenit_consumption \
+  --exclude-module _tkinter \
+  --exclude-module Tkinter \
+  --exclude-module enchant \
+  --exclude-module twisted \
+  /Users/benoitfoucque/GITHUB_PALOIT_HK/INNOVATION-LAB-CONSUMPTION-RECORDER/connected_consumption.py
+
+
+pyinstaller -y --clean --windowed greenit_consumption.spec
+
+pushd dist
+hdiutil create ./greenit_consumption.dmg -srcfolder greenit_consumption.app -ov
+popd

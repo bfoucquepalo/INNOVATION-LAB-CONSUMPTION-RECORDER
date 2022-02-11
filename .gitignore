@@ -1,0 +1,5 @@
+/pyconsumptionrecorder
+config_local.py
+build/
+dist/
+__pycache__
