@@ -30,6 +30,8 @@ class Hello_consumption(App):
         textinput.bind(text=self.on_text)
         self.timer = None
         self.projectName = textinput.text
+
+        self.sendeverysecond = 300
         
         #the layout
         superBox = BoxLayout(orientation='vertical')
@@ -63,7 +65,7 @@ class Hello_consumption(App):
         print('My button1 <%s> state is <%s>' % (instance, value))
         if self.timer is not None:
             Clock.unschedule(self.timer)
-        self.timer = Clock.schedule_interval(self.timedAction, 10)        
+        self.timer = Clock.schedule_interval(self.timedAction, self.sendeverysecond)        
 
     def callbackStop(self, instance, value):
         print('My button2 <%s> state is <%s>' % (instance, value))

@@ -2,4 +2,5 @@
 config_local.py
 build/
 dist/
+config_local_server.py
 __pycache__
