@@ -8,3 +8,4 @@ python -m pip install kivy
 pip install psutil
 pip install requests
 pip install pyinstaller
+pip install xlsxwriter
