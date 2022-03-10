@@ -53,6 +53,7 @@ class Consumption_recorder():
         #print(self.myHeader)
 
     def generate_message(self):
+        print('start generating message')
         self.myMessage={}
         self.myMessage['header'] = self.myHeader
         #print(psutil.cpu_times())

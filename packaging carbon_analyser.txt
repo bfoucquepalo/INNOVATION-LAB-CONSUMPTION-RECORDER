@@ -1,0 +1,25 @@
+
+#reference
+https://kivy.org/doc/stable/guide/packaging-osx.html#osx-pyinstaller
+
+#in brew
+brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer
+
+#in the virtual env
+#paloit_carbon_analyser
+pyinstaller -y --clean --windowed --name paloit_carbon_analyser \
+  --exclude-module _tkinter \
+  --exclude-module Tkinter \
+  --exclude-module enchant \
+  --exclude-module twisted \
+  /Users/benoitfoucque/GITHUB_PALOIT_HK/INNOVATION-LAB-CONSUMPTION-RECORDER/consumption_recorder_v2.py
+
+
+pyinstaller -y --clean --windowed paloit_carbon_analyser.spec
+
+Editing the spec file: paloit_carbon_analyser.spec by injecting the .kv: datas=[('consumption_recorder_ux_definition_v2.kv','.')],
+
+
+pushd dist
+hdiutil create ./paloit_carbon_analyser.dmg -srcfolder paloit_carbon_analyser.app -ov
+popd
