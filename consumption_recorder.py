@@ -4,6 +4,7 @@ import copy
 import time
 import hashlib
 import uuid
+import datetime
 
 class Consumption_recorder():
     
@@ -37,6 +38,10 @@ class Consumption_recorder():
         #header
         self.myHeader = {}
         self.myHeader['project']='init project'
+        #time active
+        self.myHeader['active_duration_s'] = 0
+        self.myActiveTimeS = 0
+        self.lastDatePush = datetime.datetime.now()
 
 
         #we get the user list
@@ -52,10 +57,13 @@ class Consumption_recorder():
 
         #print(self.myHeader)
 
-    def generate_message(self):
+    def generate_message(self,stepDuration_S):
         print('start generating message')
         self.myMessage={}
         self.myMessage['header'] = self.myHeader
+        #duration
+        self.myMessage['header']['duration'] = stepDuration_S
+        self.lastDatePush = datetime.datetime.now()
         #print(psutil.cpu_times())
         myCPU = psutil.cpu_times()
         

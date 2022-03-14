@@ -12,6 +12,7 @@ from consumption_recorder import *
 #
 import json
 import requests
+import datetime
 from config_local import *
 
 
@@ -32,31 +33,38 @@ class Hello_consumption(TabbedPanel):
         PostData={}
         PostData['message']=self.myRecorder.myMessage
 
+        try:
+            response = requests.post(PostAddressGetInfoElement,data=json.dumps(PostData),headers = {"Content-Type":"application/json","Authorization":"Bearer " + token,"x-api-key":API_KEY})
 
-        response = requests.post(PostAddressGetInfoElement,data=json.dumps(PostData),headers = {"Content-Type":"application/json","Authorization":"Bearer " + token,"x-api-key":API_KEY})
+            print('POST STATUS: ' + str(response.status_code) + ' REASON: ' +  str(response.reason))
 
-        print('POST STATUS: ' + str(response.status_code) + ' REASON: ' +  str(response.reason))
-
-        print('POST ANSWER: ' + response.text)
-        responseJson = json.loads(response.text)
-        print(responseJson)
-       
-        self.myByteReceived = responseJson['bytes-received']
-        self.myByteSent= responseJson['bytes-sent']
-        self.myInitDate=  responseJson['init_date'].split(' ')[0]
-        self.myNewsLabel=  responseJson['news_content']
-        self.myEnegryConsumption = responseJson['energy_consumed_kWh']
-        self.myCO2Consumption = responseJson['co2_equi_emited_kg']
+            print('POST ANSWER: ' + response.text)
+            responseJson = json.loads(response.text)
+            print(responseJson)
         
-        #self.label_data_energy_consumed= str(24)
-        #self.label_data_co2_emited= str(55)
-        #self.label_news= 'This is a super News1!'
+            self.myByteReceived = responseJson['bytes-received']
+            self.myByteSent= responseJson['bytes-sent']
+            self.myInitDate=  responseJson['init_date'].split(' ')[0]
+            self.myNewsLabel=  responseJson['news_content']
+            self.myEnegryTransfertConsumption = responseJson['energy_transfert_consumed_kWh']
+            self.myEnegryDeviceConsumption = responseJson['energy_device_consumed_kWh']
+            self.myEnegryDataCenterConsumption = responseJson['energy_datacenter_consumed_kWh']
+            self.myEnegryTotalConsumption = responseJson['energy_consumed_kWh']
+            self.myCO2Consumption = responseJson['co2_equi_emited_kg']
+            self.myActiveTime = responseJson['active_time']
 
-        self.updateLabel()
+            self.updateLabel()
+        except Exception as e:
+            print('ISSUE during communication')
     
     def timedAction(self, dt):
         print(str(self.projectName))
-        self.myRecorder.generate_message()
+        timedelta = int(abs((self.myRecorder.lastDatePush-datetime.datetime.now()).total_seconds()))
+        if (timedelta>self.sendeverysecond):
+            #it means that we have slept: so we push the time
+            self.myRecorder.generate_message(self.sendeverysecond)
+        else:
+            self.myRecorder.generate_message(timedelta)
         self.push_message()
 
     info = StringProperty()
@@ -74,7 +82,11 @@ class Hello_consumption(TabbedPanel):
     myByteSent = 0
     myByteReceived = 0
     myInitDate = '0000-0-0'
-    myEnegryConsumption = 0
+    myActiveTime = 0
+    myEnegryTransfertConsumption = 0
+    myEnegryDeviceConsumption = 0
+    myEnegryDataCenterConsumption = 0
+    myEnegryTotalConsumption = 0
     myCO2Consumption = 0
     myNewsLabel = 'This is the news place holder!'
 
@@ -82,6 +94,7 @@ class Hello_consumption(TabbedPanel):
     label_data_received= ObjectProperty()
     label_data_sent= ObjectProperty()
     label_data_first_date= ObjectProperty()
+    label_time_activity= ObjectProperty()
     label_data_energy_consumed= ObjectProperty()
     label_data_co2_emited= ObjectProperty()
     label_news= ObjectProperty()
@@ -104,7 +117,12 @@ class Hello_consumption(TabbedPanel):
     def forceSynchro(self):
         print('Forcing Synchro!!!!!')
         self.mycounter += 1
-        self.myRecorder.generate_message() 
+        timedelta = int(abs((self.myRecorder.lastDatePush-datetime.datetime.now()).total_seconds()))
+        if (timedelta>self.sendeverysecond):
+            #it means that we have slept: so we push the time
+            self.myRecorder.generate_message(self.sendeverysecond)
+        else:
+            self.myRecorder.generate_message(timedelta)
         self.push_message()
         self.updateLabel()
         
@@ -113,8 +131,11 @@ class Hello_consumption(TabbedPanel):
         self.label_data_received.text = str(self.myByteReceived) + ' GB'
         self.label_data_sent.text = str(self.myByteSent) + ' GB'
         self.label_data_first_date.text = str(self.myInitDate)
-        
-        self.label_data_energy_consumed.text = str(self.myEnegryConsumption) + ' kWh'
+        self.label_time_activity.text = str(self.myActiveTime) + ' h'
+        self.label_data_energy_consumed.text = str(self.myEnegryTransfertConsumption) + ' kWh'
+        self.label_laptop_energy_consumed.text = str(self.myEnegryDeviceConsumption) + ' kWh'
+        self.label_datacenter_energy_consumed.text = str(self.myEnegryDataCenterConsumption) + ' kWh'
+        self.label_energy_total_consumed.text=str(self.myEnegryTotalConsumption) + ' kWh'
         self.label_data_co2_emited.text = str(self.myCO2Consumption) + ' kg'
         self.label_news.text = str(self.myNewsLabel)
     
@@ -122,9 +143,9 @@ class Hello_consumption(TabbedPanel):
 
 class TabbedPanelApp(App):
     def build(self):
-        self.title = 'PALO IT Carbon Analyser'
+        self.title = 'PALO IT Carbon Analyser 0.7.1'
         obj = Hello_consumption()
-        obj.myRecorder.generate_message() 
+        obj.myRecorder.generate_message(0) #0 is the init 
         obj.push_message()
         obj.timer = Clock.schedule_interval(obj.timedAction, obj.sendeverysecond)    
         return obj

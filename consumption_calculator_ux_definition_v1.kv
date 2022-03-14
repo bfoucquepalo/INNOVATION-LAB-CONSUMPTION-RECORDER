@@ -11,7 +11,6 @@
     label_laptop_energy_consumed: my_label_device_energy_consumed
     label_datacenter_energy_consumed: my_label_datacenter_energy_consumed
     label_energy_total_consumed: my_label_energy_total_consumed
-    label_time_activity: my_label_time_activity
     
     #News
     label_news: my_label_data_news
@@ -54,11 +53,6 @@
                     id: my_label_data_sent
                     text: '0 GB'
                 Label:
-                    text: 'Time activity'
-                Label:
-                    id: my_label_time_activity
-                    text: '0 h'
-                Label:
                     text: 'Transfert Energy Consummed'
                 Label:
                     id: my_label_data_energy_consumed
@@ -86,6 +80,95 @@
             Button:
                 text: 'Force Update'
                 on_press: root.forceSynchro()
+    
+    # ------------------------------------------------------------------------------------
+    # ------------------------------------- Calculator -----------------------------------
+    # ------------------------------------------------------------------------------------
+    TabbedPanelItem:
+        text: 'Calculator WIP'
+        GridLayout:
+            cols:1
+            GridLayout:
+                cols:1
+                GridLayout:
+                    Label:
+                        text: 'Col1'
+                    Slider:
+                        id: slider_line_type
+                        min: 0
+                        max: 100
+                        step: 1
+                        orientation: 'horizontal'
+                    Label:
+                        text: str(slider_line_type.value)
+                    Label:
+                        text: 'str(slider_line_type.value)'
+                # ---------------------------- COL RATIO MOBILE - LAPTOP - TELEVISION --------------------
+                GridLayout:
+                    cols:3
+
+                    Slider:
+                        id: slider_mobile
+                        min: 0
+                        max: 100
+                        step: 1
+                        orientation: 'horizontal'
+
+                    Label:
+                        text: str(slider_mobile.value)
+                    Label:
+                        text: 'str(slider_mobile.value)'
+                    Slider:
+                        id: slider_laptop
+                        min: 0
+                        max: 100
+                        step: 1
+                        orientation: 'horizontal'
+
+                    Label:
+                        text: str(slider_laptop.value)
+                    Label:
+                        text: 'str(slider_laptop.value)'
+                    Slider:
+                        id: slider_television
+                        min: 0
+                        max: 100
+                        step: 1
+                        orientation: 'horizontal'
+                    Label:
+                        text: str(slider_television.value)
+                    Label:
+                        text: 'str(slider_television.value)'
+            # ------------------------------------- COMPUTE BUTTON -----------------------------------
+            GridLayout:
+                cols:1
+                Button:
+                    text: 'COMPUTE'
+                    #on_press: root.forceSynchro()
+            # ------------------------------------- RESULT -----------------------------------
+            GridLayout:
+                cols:2
+                Label:
+                    text: 'Data Received'
+                Label:
+                    id: my_label_data_received_calculator
+                    text: '0 GB'
+                Label:
+                    text: 'Data Sent'
+                Label:
+                    id: my_label_data_sent_calculator
+                    text: '0 GB'
+                Label:
+                    text: 'Transfert Energy Consummed'
+                Label:
+                    id: my_label_data_energy_consumed_calculator
+                    text: '0 kwh'
+                Label:
+                    text: 'CO2 Emitted'
+                Label:
+                    id: my_label_data_co2_emited_calculator
+                    text: '0 kg'
+
     # ------------------------------------------------------------------------------------
     # ------------------------------------- SETTINGS -------------------------------------
     # ------------------------------------------------------------------------------------
