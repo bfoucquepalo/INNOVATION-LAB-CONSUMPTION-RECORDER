@@ -1,8 +1,8 @@
 import json
 import xlsxwriter
 #
-sourceFile = 'gr491/gr491.json'
-targetFile = 'gr491/template_gr491.xlsx'
+sourceFile = 'gr491/en_gr491_completed.json'
+targetFile = 'gr491/template_en_gr491_full.xlsx'
 workbook = xlsxwriter.Workbook(targetFile)
 
 
@@ -38,7 +38,8 @@ with open(sourceFile) as json_file:
             myLife_cycle = currentQuestion['life_cycle']
             myTest = currentQuestion['test']
             myDescription = currentQuestion['description']
-            myListInfo = [myDomain, myId,myTitle,myCategory,myOdd,myImpactsPeople,myImpactPlanet,myImpactPprosperity,myDifficulty,myPriority,myLife_cycle,myTest,myDescription,'']
+            myScore = currentQuestion['score']
+            myListInfo = [myDomain, myId,myTitle,myCategory,myOdd,myImpactsPeople,myImpactPlanet,myImpactPprosperity,myDifficulty,myPriority,myLife_cycle,myTest,myDescription,myScore]
             
             #print(myListInfo)
             try:

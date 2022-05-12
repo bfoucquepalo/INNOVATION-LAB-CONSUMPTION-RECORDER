@@ -7,7 +7,7 @@ block_cipher = None
 a = Analysis(['/Users/benoitfoucque/GITHUB_PALOIT_HK/INNOVATION-LAB-CONSUMPTION-RECORDER/consumption_recorder_v2.py'],
              pathex=[],
              binaries=[],
-             datas=[('consumption_recorder_ux_definition_v2.kv','.')],
+             datas=[('consumption_recorder_ux_definition_v2.kv','.'),('PALOIT_LOGO_200-200.jpeg','.')],
              hiddenimports=[],
              hookspath=[],
              hooksconfig={},
@@ -45,5 +45,5 @@ coll = COLLECT(exe,
                )
 app = BUNDLE(coll,
              name='paloit_carbon_analyser.app',
-             icon=None,
+             icon='PALOIT_LOGO_200-200.jpeg',
              bundle_identifier=None)
